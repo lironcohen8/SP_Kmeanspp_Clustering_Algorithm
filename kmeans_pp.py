@@ -6,7 +6,7 @@ import numpy as np
 def distance(vector1, vector2):
     '''Claculates the distance between two vectors'''
     dis = 0
-    for i in range(vector1.shape[1]): #Runs for each dimension
+    for i in range(1,vector1.shape[1]): #Runs for each dimension
         dis += (vector1.iloc[0,i]-vector2.iloc[0,i])**2 
     return dis
 
@@ -23,17 +23,18 @@ def clacDi(vector, centroids, z):
 
 def initCentroids(vectors, k, numOfVectors, dimension):
     distances = [0 for i in range(numOfVectors)]
-    centroids = []
+    initialcentroids = []
+    initialCentroidsIndices = []
     
     #Get the first centroid
     i = np.random.randint(0, numOfVectors+1)
-    centroids.append(vectors.iloc[[i]])
+    initialcentroids.append(vectors.iloc[[i]])
     
     
     z=1
     while z<k:
         for i in range(numOfVectors): #Calc Di for each vector
-            di = clacDi(vectors.iloc[[i]], centroids, z)
+            di = clacDi(vectors.iloc[[i]], initialcentroids, z)
             distances[i] = di
         z+=1
         
@@ -43,17 +44,19 @@ def initCentroids(vectors, k, numOfVectors, dimension):
         
         #Chooses the next centroid based on the probabilities we calculated
         vecInd = np.random.choice(numOfVectors,p=probabilities)
-        centroids.append(vectors.iloc[[vecInd]])
+        initialcentroids.append(vectors.iloc[[vecInd]])
     
-    #Convert the centroids for dataframes to simple lists
-    for i in range(len(centroids)):
-        centroids[i] = centroids[i].values.tolist()[0]
+    #Convert the initialcentroids for dataframes to simple lists
+    for i in range(len(initialcentroids)):
+        initialcentroids[i] = initialcentroids[i].values.tolist()[0]
+        initialCentroidsIndices.append(int(initialcentroids[i][0]))
+        initialcentroids[i] = initialcentroids[i][1:]
         
-    return centroids
+    return initialCentroidsIndices, initialcentroids
 
 
 
-def main(k=12, file_name_1='', file_name_2='', max_iter=300):
+def main(k=3, file_name_1='', file_name_2='', max_iter=300):
     #NEEDS TO GO!!!
     file_name_1 = r'C:\Users\shake\OneDrive\אוניברסיטה\סמסטר ד\פרויקט תוכנה\projects\SoftwareProjectEx2\tests\test_data\input_1_db_1.txt'
     file_name_2 = r'C:\Users\shake\OneDrive\אוניברסיטה\סמסטר ד\פרויקט תוכנה\projects\SoftwareProjectEx2\tests\test_data\input_1_db_2.txt'
@@ -69,9 +72,9 @@ def main(k=12, file_name_1='', file_name_2='', max_iter=300):
     dimension = vectors.shape[1]
     
     #Initiate the centroids list
-    centroids = initCentroids(vectors, k, numOfVectors, dimension)
+    initialCentroidsIndices, initialcentroids = initCentroids(vectors, k, numOfVectors, dimension)
     
-    print(len(centroids),centroids)
+    print(len(initialcentroids),initialCentroidsIndices, initialcentroids)
     
     
 

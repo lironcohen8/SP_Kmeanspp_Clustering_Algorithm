@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
+import sys
 import pandas as pd
 import numpy as np
 
+def isPositiveInt(s):
+    try:
+        i = int(s)
+        return i>0 
+    except:
+        return False
+    
+    
 
 def distance(vector1, vector2, dimension):
     '''Claculates the distance between two vectors'''
@@ -22,6 +31,8 @@ def clacDi(vector, centroids, z, dimension):
 
 
 def initCentroids(vectors, k, numOfVectors, dimension):
+    assert k<numOfVectors, "The number of clusters must be smaller than the number of vectors"
+    
     distances = [0 for i in range(numOfVectors)]
     initialcentroids = []
     initialCentroidsIndices = []
@@ -57,11 +68,27 @@ def initCentroids(vectors, k, numOfVectors, dimension):
 
 
 
-def main(k=3, file_name_1='', file_name_2='', max_iter=300):
-    #NEEDS TO GO!!!
-    file_name_1 = r'C:\Users\shake\OneDrive\אוניברסיטה\סמסטר ד\פרויקט תוכנה\projects\SoftwareProjectEx2\tests\test_data\input_1_db_1.txt'
-    file_name_2 = r'C:\Users\shake\OneDrive\אוניברסיטה\סמסטר ד\פרויקט תוכנה\projects\SoftwareProjectEx2\tests\test_data\input_1_db_2.txt'
-    #NEEDS TO GO!!!
+def main(max_iter=300):
+    #Checks if we have the right amount of args
+    numOfArgs = len(sys.argv)
+    assert numOfArgs==4 or numOfArgs==5, "Incorrect number of arguments" 
+    
+    #Check if k>0 and type(k)=int
+    assert isPositiveInt(sys.argv[1]), "'k' is not a positive int" 
+    k = int(sys.argv[1])
+
+    #Check if max_iter>0 and type(max_iter)=int
+    #Get max_iter / file_name_1 / file_name_2
+    if numOfArgs == 5:
+        assert isPositiveInt(sys.argv[2]), "'max_iter' is not an positive int" 
+        max_iter = int(sys.argv[2])
+        file_name_1 = sys.argv[3]
+        file_name_2 = sys.argv[4]
+        
+    else:
+        file_name_1 = sys.argv[2]
+        file_name_2 = sys.argv[3]
+    
     
     #Read both data files and merge them
     df1 = pd.read_csv(file_name_1, header=None)
@@ -75,7 +102,8 @@ def main(k=3, file_name_1='', file_name_2='', max_iter=300):
     #Initiate the centroids list
     initialCentroidsIndices, initialcentroids = initCentroids(vectors, k, numOfVectors, dimension)
     
-    print(len(initialcentroids),initialCentroidsIndices, initialcentroids)
+    #Print first row - Need to stay
+    print(','.join(map(str,initialCentroidsIndices)))
     
     
 

@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, Extension
 
 setup(
     name="mykmeanssp",
@@ -12,7 +11,7 @@ setup(
     ext_modules=[
         Extension(
             'mykmeanssp',
-            ['kmeans.c'],
+            sources = ['kmeans.c'],
             )
         ]
 )

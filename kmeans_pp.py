@@ -15,7 +15,7 @@ def isPositiveInt(s):
 
 def distance(vector1, vector2):
     '''Claculates the distance between two vectors'''
-    return np.sum((vector1.iloc[0]-vector2.iloc[0])**2)
+    return np.sum((vector1-vector2)**2)
 
 
 def clacDi(vector, centroids, z, dimension):
@@ -33,14 +33,14 @@ def initCentroids(vectors, k, numOfVectors, dimension):
     
     #Get the first centroid
     i = np.random.randint(0, numOfVectors+1)
-    initialcentroids[0] = vectors.iloc[[i]]
+    initialcentroids[0] = vectors[i]
     initialCentroidsIndices[0] = i
     
     
     z=1
     while z<k:
         for i in range(numOfVectors): #Calc Di for each vector
-            distances[i] = clacDi(vectors.iloc[[i]], initialcentroids, z, dimension)
+            distances[i] = clacDi(vectors[i], initialcentroids, z, dimension)
         
         #Calculate the probability to choose each vector as the next centroid
         sumDi = np.sum(distances)
@@ -48,7 +48,7 @@ def initCentroids(vectors, k, numOfVectors, dimension):
         
         #Chooses the next centroid based on the probabilities we calculated
         vecInd = np.random.choice(numOfVectors,p=probabilities)
-        initialcentroids[z] = vectors.iloc[[i]]
+        initialcentroids[z] = vectors[i]
         initialCentroidsIndices[z] = int(vecInd)
         
         z+=1
@@ -83,19 +83,17 @@ def main(max_iter=300):
     
     
     #Read both data files and merge them
-    print('Started reading')
     df1 = pd.read_csv(file_name_1, index_col=0, header=None).sort_index()
     df2 = pd.read_csv(file_name_2, index_col=0, header=None).sort_index()
     vectors = df1.merge(df2, left_index=True, right_index=True)
     vectors.index = vectors.index.astype('int64')
-    print('Finished reading')  
     
     #Calculate numOfVectors=N and dimension=d
     numOfVectors = vectors.shape[0]
     dimension = vectors.shape[1]
     
     #Initiate the centroids list
-    initialCentroidsIndices, initialcentroids = initCentroids(vectors, k, numOfVectors, dimension)
+    initialCentroidsIndices, initialcentroids = initCentroids(vectors.values, k, numOfVectors, dimension)
     
     #Print first row - Need to stay
     print(','.join(map(str,initialCentroidsIndices)))

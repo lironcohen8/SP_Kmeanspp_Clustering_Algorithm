@@ -32,6 +32,7 @@ def clacDi(vector, centroids, z, dimension):
 
 def initCentroids(vectors, k, numOfVectors, dimension):
     assert k<numOfVectors, "The number of clusters must be smaller than the number of vectors"
+    np.random.seed(0)
     
     distances = [0 for i in range(numOfVectors)]
     initialcentroids = []
@@ -94,6 +95,7 @@ def main(max_iter=300):
     df1 = pd.read_csv(file_name_1, header=None)
     df2 = pd.read_csv(file_name_2, header=None)
     vectors = df1.merge(df2,on=0)
+    vectors.sort_values(vectors.columns[0], inplace=True)
     
     #Calculate numOfVectors=N and dimension=d
     numOfVectors = vectors.shape[0]

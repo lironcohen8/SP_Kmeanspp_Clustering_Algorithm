@@ -87,6 +87,7 @@ def main(max_iter=300):
     df1 = pd.read_csv(file_name_1, index_col=0, header=None).sort_index()
     df2 = pd.read_csv(file_name_2, index_col=0, header=None).sort_index()
     vectors = df1.merge(df2, left_index=True, right_index=True)
+    vectors.index = vectors.index.astype('int64')
     print('Finished reading')  
     
     #Calculate numOfVectors=N and dimension=d

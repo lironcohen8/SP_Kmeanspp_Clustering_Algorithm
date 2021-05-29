@@ -48,13 +48,14 @@ def initCentroids(vectors, k, numOfVectors, dimension):
         
         #Chooses the next centroid based on the probabilities we calculated
         vecInd = np.random.choice(numOfVectors,p=probabilities)
-        initialcentroids[z] = vectors[i]
+        initialcentroids[z] = vectors[int(vecInd)]
         initialCentroidsIndices[z] = int(vecInd)
         
         z+=1
+    
     #Convert the initialcentroids from dataframes to simple lists
-    #for i in range(len(initialcentroids)):
-     #   initialcentroids[i] = initialcentroids[i].values.tolist()[0]
+    for i in range(len(initialcentroids)):
+        initialcentroids[i] = initialcentroids[i].tolist()[0]
         
     return initialCentroidsIndices, initialcentroids
 

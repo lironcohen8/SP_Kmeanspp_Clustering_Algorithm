@@ -1,5 +1,8 @@
+#define PY_SSIZE_T_CLEAN
 #include <stdio.h>
 #include <assert.h>
+#include <Python.h>
+
 int k, max_iter, dimension, numOfVectors = 0, changes = 1;
 float rawK, rawMaxIter;
 double **vectors, **centroids;
@@ -10,6 +13,43 @@ void *realloc(void *ptr, size_t size);
 void free(void *ptr);
 char *strtok(char * str, const char *delim);
 double atof(const char * str);
+
+static struct PyModuleDef mykmeanssp = {
+    PyModuleDef_HEAD_INIT,
+    "mykmeanssp",     // name of module exposed to Python
+    "mykmeanssp Python wrapper for custom C extension library.", // module documentation
+    -1
+};
+
+static PyObject* fit(PyObject *self, PyObject *args){
+    int counter = 1;
+    if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
+        return NULL;
+    }
+
+    clusters = (int **)calloc(k, numOfVectors*sizeof(int));
+    assert(clusters != NULL);
+    while ((counter<=max_iter) && (changes > 0)) {
+        assignVectorToCluster();
+        updateCentroidValue();
+        counter += 1;
+    }
+
+    printResult();
+    free(vectors);
+    free(centroids);
+    free(clusters);
+    free(clustersSizes);
+}
+
+
+
+
+
+
+
+
+
 
 int calcDimension(char buffer[]) {
     /*

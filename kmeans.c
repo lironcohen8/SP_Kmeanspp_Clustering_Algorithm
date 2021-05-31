@@ -16,46 +16,6 @@ void free(void *ptr);
 char *strtok(char * str, const char *delim);
 double atof(const char * str);
 
-void assignVectorToCluster();
-void updateCentroidValue();
-void printResult();
-
-static struct PyModuleDef mykmeanssp = {
-    PyModuleDef_HEAD_INIT,
-    "mykmeanssp",     // name of module exposed to Python
-    "mykmeanssp Python wrapper for custom C extension library.", // module documentation
-    -1
-};
-
-static PyObject* fit(PyObject *self, PyObject *args){
-    int counter = 1;
-    if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
-        return NULL;
-    }
-
-    clusters = (int **)calloc(k, numOfVectors*sizeof(int));
-    assert(clusters != NULL);
-    while ((counter<=max_iter) && (changes > 0)) {
-        assignVectorToCluster();
-        updateCentroidValue();
-        counter += 1;
-    }
-
-    printResult();
-    free(vectors);
-    free(centroids);
-    free(clusters);
-    free(clustersSizes);
-}
-
-
-
-
-
-
-
-
-
 
 int calcDimension(char buffer[]) {
     /*
@@ -258,4 +218,56 @@ int main(int argc, char *argv[]) {
     free(clusters);
     free(clustersSizes);
     return 0;
+}
+
+
+static PyObject* fit(PyObject *self, PyObject *args){
+    int counter = 1;
+    if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
+        return NULL;
+    }
+
+    clusters = (int **)calloc(k, numOfVectors*sizeof(int));
+    assert(clusters != NULL);
+    while ((counter<=max_iter) && (changes > 0)) {
+        assignVectorToCluster();
+        updateCentroidValue();
+        counter += 1;
+    }
+
+    printResult();
+    free(vectors);
+    free(centroids);
+    free(clusters);
+    free(clustersSizes);
+
+    Py_RETURN_NONE;
+}
+
+static PyMethodDef kmeansMethods[] = {
+    {"fit",
+    (PyCFunction) fit,
+    METH_VARARGS,
+    PyDoc_STR("Kmeans")},
+    {NULL, NULL, 0, NULL}
+};
+
+
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "mykmeanssp",     // name of module exposed to Python
+    "mykmeanssp Python wrapper for custom C extension library.", // module documentation
+    -1,
+    kmeansMethods
+};
+
+PyMODINIT_FUNC
+PyInit_mykmeanssp(void)
+{
+    PyObject *m;
+    m = PyModule_Create(&moduledef);
+    if (!m) {
+        return NULL;
+    }
+    return m;
 }

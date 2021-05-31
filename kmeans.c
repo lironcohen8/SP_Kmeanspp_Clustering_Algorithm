@@ -222,26 +222,30 @@ int main(int argc, char *argv[]) {
 
 
 static PyObject* fit(PyObject *self, PyObject *args){
+    int i, j;
     int counter = 1;
-    PyListObject *pyCentroids;
-    PyListObject *pyVectors;
+    PyObject *pyCentroids;
+    PyObject *pyVectors;
+    PyObject *tempVec;
 
     if (!PyArg_ParseTuple(args,"OiiOii",&pyCentroids, &k, &max_iter, &pyVectors, &numOfVectors, &dimension)){
         return NULL;
     }
-    printf("k=%d, max_iter=%d, numOfVectors=%d, dimension=%d",k,max_iter,numOfVectors,dimension);
+    printf("k=%d, max_iter=%d, numOfVectors=%d, dimension=%d\n",k,max_iter,numOfVectors,dimension);
     
     vectors = (double **)malloc(1 * sizeof(*vectors));
     assert(vectors != NULL);
     centroids = (double **)calloc(k, dimension*sizeof(double));
     assert(centroids != NULL);
     
-    int i, j;
     for (i = 0; i < k; i++) {
+        tempVec = PyList_GetItem(pyCentroids,i);
+        printf("\n Hi %d",(int)PyList_Size(tempVec));
         for (j = 0; j < dimension; j++) {
-            PyListObject *vec = PyList_GetItem(pyCentroids,i);
-            centroids[i][j] = PyFloat_AsDouble(PyList_GetItem(vec,j));
+            printf("%f",PyFloat_AsDouble(PyList_GetItem(tempVec,j)));
+            //centroids[i][j] = PyFloat_AsDouble(PyList_GetItem(tempVec,j));
         }
+        printf("\n");
     } 
     printf("%f",centroids[0][0]);
 

@@ -223,9 +223,15 @@ int main(int argc, char *argv[]) {
 
 static PyObject* fit(PyObject *self, PyObject *args){
     int counter = 1;
+    PyListObject a = args;
+    printf(a[0]);
+    printf("Stated running fit:\n");
     if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
+        printf("    Error");
         return NULL;
     }
+    printf("k is - %d\n",k);
+    printf("max_iter is - %d\n",max_iter);
 
     clusters = (int **)calloc(k, numOfVectors*sizeof(int));
     assert(clusters != NULL);

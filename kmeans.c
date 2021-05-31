@@ -223,13 +223,27 @@ int main(int argc, char *argv[]) {
 
 static PyObject* fit(PyObject *self, PyObject *args){
     int counter = 1;
-    printf("Stated running fit:\n");
-    if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
-        printf("    Error");
+    PyListObject *pyCentroids;
+    PyListObject *pyVectors;
+
+    if (!PyArg_ParseTuple(args,"OiiOii",&pyCentroids, &k, &max_iter, &pyVectors, &numOfVectors, &dimension)){
         return NULL;
     }
-    printf("k is - %d\n",k);
-    printf("max_iter is - %d\n",max_iter);
+    printf("k=%d, max_iter=%d, numOfVectors=%d, dimension=%d",k,max_iter,numOfVectors,dimension);
+    
+    vectors = (double **)malloc(1 * sizeof(*vectors));
+    assert(vectors != NULL);
+    centroids = (double **)calloc(k, dimension*sizeof(double));
+    assert(centroids != NULL);
+    
+    int i, j;
+    for (i = 0; i < k; i++) {
+        for (j = 0; j < dimension; j++) {
+            PyListObject *vec = PyList_GetItem(pyCentroids,i);
+            centroids[i][j] = PyFloat_AsDouble(PyList_GetItem(vec,j));
+        }
+    } 
+    printf("%f",centroids[0][0]);
 
     clusters = (int **)calloc(k, numOfVectors*sizeof(int));
     assert(clusters != NULL);

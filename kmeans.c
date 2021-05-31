@@ -223,8 +223,6 @@ int main(int argc, char *argv[]) {
 
 static PyObject* fit(PyObject *self, PyObject *args){
     int counter = 1;
-    PyListObject a = args;
-    printf(a[0]);
     printf("Stated running fit:\n");
     if (!PyArg_ParseTuple(args,"O",&centroids, &k, &max_iter, &vectors, &numOfVectors, &dimension)){
         printf("    Error");

@@ -2,7 +2,7 @@
 import sys
 import pandas as pd
 import numpy as np
-#import mykmeanssp
+import mykmeanssp
 
 def isPositiveInt(s):
     try:
@@ -99,7 +99,7 @@ def main(max_iter=300):
     #Print first row - Need to stay
     print(','.join(map(str,initialCentroidsIndices)))
     
-    #mykmeanssp.fit(initialcentroids, k, max_iter, vectors, numOfVectors, dimension)
+    mykmeanssp.fit(initialcentroids, k, max_iter, vectors, numOfVectors, dimension)
     
 
 

@@ -1,18 +1,24 @@
 #define PY_SSIZE_T_CLEAN
+#include <Python.h>
 #include <stdio.h>
 #include <assert.h>
-#include <Python.h>
+
 
 int k, max_iter, dimension, numOfVectors = 0, changes = 1;
 float rawK, rawMaxIter;
 double **vectors, **centroids;
 int **clusters, *clustersSizes;
+
 void *calloc(size_t nitems, size_t size);
 void *malloc(size_t size);
 void *realloc(void *ptr, size_t size);
 void free(void *ptr);
 char *strtok(char * str, const char *delim);
 double atof(const char * str);
+
+void assignVectorToCluster();
+void updateCentroidValue();
+void printResult();
 
 static struct PyModuleDef mykmeanssp = {
     PyModuleDef_HEAD_INIT,

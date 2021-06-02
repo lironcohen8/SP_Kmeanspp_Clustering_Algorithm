@@ -10,8 +10,7 @@ def isPositiveInt(s):
         return i>0 
     except:
         return False
-    
-    
+
 
 def distance(vector1, vector2):
     '''Claculates the distance between two vectors'''
@@ -89,7 +88,6 @@ def main(max_iter=300):
     else:
         file_name_1 = sys.argv[2]
         file_name_2 = sys.argv[3]
-    
     
     #Read both data files and merge them
     df1 = pd.read_csv(file_name_1, index_col=0, header=None).sort_index()

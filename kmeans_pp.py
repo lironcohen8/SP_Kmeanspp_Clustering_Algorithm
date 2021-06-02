@@ -36,7 +36,6 @@ def initCentroids(vectors, k, numOfVectors, dimension):
     initialcentroids[0] = vectors[i]
     initialCentroidsIndices[0] = i
     
-    
     z=1
     while z<k:
         for i in range(numOfVectors): #Calc Di for each vector
@@ -55,10 +54,9 @@ def initCentroids(vectors, k, numOfVectors, dimension):
     
     #Convert the initialcentroids from dataframes to simple lists
     for i in range(len(initialcentroids)):
-        initialcentroids[i] = initialcentroids[i].tolist()[0]
-        
+        initialcentroids[i] = initialcentroids[i].tolist()
+    
     return initialCentroidsIndices, initialcentroids
-
 
 
 def main(max_iter=300):
@@ -99,6 +97,9 @@ def main(max_iter=300):
     #Print first row - Need to stay
     print(','.join(map(str,initialCentroidsIndices)))
     
+    #Transform the vectors to list of lists
+    vectors = vectors.values.tolist()
+
     #Run the C part
     mykmeanssp.fit(initialcentroids, k, max_iter, vectors, numOfVectors, dimension)
     

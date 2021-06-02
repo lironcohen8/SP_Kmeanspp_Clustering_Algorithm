@@ -227,6 +227,8 @@ static PyObject* fit(PyObject *self, PyObject *args){
     PyObject *pyCentroids;
     PyObject *pyVectors;
     PyObject *tempVec;
+    PyListObject *resCentroids;
+    PyListObject *tempCentroid;
 
     if (!PyArg_ParseTuple(args,"OiiOii",&pyCentroids, &k, &max_iter, &pyVectors, &numOfVectors, &dimension)){
         return NULL;
@@ -245,10 +247,8 @@ static PyObject* fit(PyObject *self, PyObject *args){
             centroids[i][j] = PyFloat_AsDouble(PyList_GetItem(tempVec,j));  
         }
     } 
-    printf(centroids);
 
     for (i = 0; i < numOfVectors; i++) {
-        printf("\n i is %d",i);
         vectors[i] = (double *)calloc(dimension, sizeof(double));
         assert(vectors[i] != NULL);
         tempVec = PyList_GetItem(pyVectors,i);
@@ -265,13 +265,21 @@ static PyObject* fit(PyObject *self, PyObject *args){
         counter += 1;
     }
 
-    printResult();
+    resCentroids = PyList_New(0);
+    for (i=0; i<k; i++){
+        tempCentroid = PyList_New(0);
+        for (j=0; j<dimension; j++){
+            PyList_Append(tempCentroid,PyFloat_FromDouble(centroids[i][j]));
+        }
+        PyList_Append(resCentroids, tempCentroid);
+    }
+    
     free(vectors);
     free(centroids);
     free(clusters);
     free(clustersSizes);
-
-    Py_RETURN_NONE;
+    
+    return resCentroids;
 }
 
 static PyMethodDef kmeansMethods[] = {

@@ -58,14 +58,17 @@ def initCentroids(vectors, k, numOfVectors, dimension):
     return initialCentroidsIndices, initialcentroids
 
 
-def printResult(centroids):
-    '''Prints the centroids'''
+def printResult(initialCentroidsIndices, centroids):
+    #Print first row
+    print(','.join(map(str,initialCentroidsIndices)),end='')
+
+    #Prints the centroids
     for centroid in centroids:
         for i in range(len(centroid)):
             centroid[i] = np.round(centroid[i],4) #Format the floats precision to 4 digits 
 
     for centroid in centroids:
-        print(','.join(map(str,centroid))) #Prints the floats as strings
+        print("\n"+','.join(map(str,centroid)),end='') #Prints the floats as strings
 
 
 def main(max_iter=300):
@@ -102,15 +105,12 @@ def main(max_iter=300):
     #Initiate the centroids list
     initialCentroidsIndices, initialcentroids = initCentroids(vectors.values, k, numOfVectors, dimension)
     
-    #Print first row - Need to stay
-    print(','.join(map(str,initialCentroidsIndices)))
-    
     #Transform the vectors to list of lists
     vectors = vectors.values.tolist()
 
     #Run the C part
     centroids = mykmeanssp.fit(initialcentroids, k, max_iter, vectors, numOfVectors, dimension)
-    printResult(centroids)
+    printResult(initialCentroidsIndices, centroids)
 
 
 if __name__ == "__main__":

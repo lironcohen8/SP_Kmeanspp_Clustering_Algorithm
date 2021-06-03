@@ -217,6 +217,7 @@ int main(int argc, char *argv[]) {
     free(centroids);
     free(clusters);
     free(clustersSizes);
+    
     return 0;
 }
 
@@ -227,8 +228,8 @@ static PyObject* fit(PyObject *self, PyObject *args){
     PyObject *pyCentroids;
     PyObject *pyVectors;
     PyObject *tempVec;
-    PyListObject *resCentroids;
-    PyListObject *tempCentroid;
+    PyObject *resCentroids;
+    PyObject *tempCentroid;
 
     if (!PyArg_ParseTuple(args,"OiiOii",&pyCentroids, &k, &max_iter, &pyVectors, &numOfVectors, &dimension)){
         return NULL;

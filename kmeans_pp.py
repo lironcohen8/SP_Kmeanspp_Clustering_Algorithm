@@ -22,7 +22,7 @@ def clacDi(vector, centroids, z, dimension):
     return min([distance(vector, centroids[i]) for i in range(z)])
 
 
-def initCentroids(vectors, k, numOfVectors, dimension):
+def initCentroids(vectorsIndex, vectors, k, numOfVectors, dimension):
     assert k<numOfVectors, "The number of clusters must be smaller than the number of vectors"
     np.random.seed(0)
     
@@ -33,7 +33,7 @@ def initCentroids(vectors, k, numOfVectors, dimension):
     #Get the first centroid
     i = np.random.randint(0, numOfVectors+1)
     initialcentroids[0] = vectors[i]
-    initialCentroidsIndices[0] = i
+    initialCentroidsIndices[0] = vectorsIndex[i]
     
     z=1
     while z<k:
@@ -47,7 +47,7 @@ def initCentroids(vectors, k, numOfVectors, dimension):
         #Chooses the next centroid based on the probabilities we calculated
         vecInd = np.random.choice(numOfVectors,p=probabilities)
         initialcentroids[z] = vectors[int(vecInd)]
-        initialCentroidsIndices[z] = int(vecInd)
+        initialCentroidsIndices[z] = vectorsIndex[int(vecInd)]
         
         z+=1
     
@@ -103,7 +103,7 @@ def main(max_iter=300):
     dimension = vectors.shape[1]
     
     #Initiate the centroids list
-    initialCentroidsIndices, initialcentroids = initCentroids(vectors.values, k, numOfVectors, dimension)
+    initialCentroidsIndices, initialcentroids = initCentroids(vectors.index, vectors.values, k, numOfVectors, dimension)
     
     #Transform the vectors to list of lists
     vectors = vectors.values.tolist()

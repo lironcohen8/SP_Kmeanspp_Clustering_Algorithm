@@ -279,7 +279,7 @@ static PyObject* fit(PyObject *self, PyObject *args){
     free(centroids);
     free(clusters);
     free(clustersSizes);
-    
+    //s
     return resCentroids;
 }
 

@@ -17,9 +17,13 @@ def distance(vector1, vector2):
     return np.sum((vector1-vector2)**2)
 
 
-def clacDi(vector, centroids, z, dimension):
+def clacDi(vectors, centroids, distances, vecInd, z):
     '''Calculates Di - the minimum distance of the vector from a centroid'''
-    return min([distance(vector, centroids[i]) for i in range(z)])
+    if z==1:
+        return distance(vectors[vecInd], centroids[0])
+    else:
+        return min(distance(vectors[vecInd], centroids[z-1]), distances[vecInd])
+    #return min([distance(vector, centroids[i]) for i in range(z)])
 
 
 def initCentroids(vectorsIndex, vectors, k, numOfVectors, dimension):
@@ -38,7 +42,7 @@ def initCentroids(vectorsIndex, vectors, k, numOfVectors, dimension):
     z=1
     while z<k:
         for i in range(numOfVectors): #Calc Di for each vector
-            distances[i] = clacDi(vectors[i], initialcentroids, z, dimension)
+            distances[i] = clacDi(vectors, initialcentroids, distances, i, z)
         
         #Calculate the probability to choose each vector as the next centroid
         sumDi = np.sum(distances)

@@ -64,15 +64,18 @@ def initCentroids(vectorsIndex, vectors, k, numOfVectors, dimension):
 
 def printResult(initialCentroidsIndices, centroids):
     #Print first row
-    print(','.join(map(str,initialCentroidsIndices)),end='')
+    print(','.join(map(str,initialCentroidsIndices)))
 
     #Prints the centroids
     for centroid in centroids:
         for i in range(len(centroid)):
             centroid[i] = np.round(centroid[i],4) #Format the floats precision to 4 digits 
 
-    for centroid in centroids:
-        print("\n"+','.join(map(str,centroid)),end='') #Prints the floats as strings
+    for i in range(len(centroids)):
+        if i==(len(centroids)-1):
+            print(','.join(map(str,centroids[i])),end='')
+        else:
+            print(','.join(map(str,centroids[i])))
 
 
 def main(max_iter=300):

@@ -227,9 +227,9 @@ static PyObject* fit(PyObject *self, PyObject *args){
     int counter = 1;
     PyObject *pyCentroids;
     PyObject *pyVectors;
-    PyObject *tempVec;
+    PyObject *tempVec = NULL;
+    PyObject *tempCentroid = NULL;
     PyObject *resCentroids;
-    PyObject *tempCentroid;
 
     if (!PyArg_ParseTuple(args,"OiiOii",&pyCentroids, &k, &max_iter, &pyVectors, &numOfVectors, &dimension)){
         return NULL;
@@ -279,7 +279,11 @@ static PyObject* fit(PyObject *self, PyObject *args){
     free(centroids);
     free(clusters);
     free(clustersSizes);
-    //s
+    Py_DECREF(pyCentroids);
+    Py_DECREF(pyVectors);
+    Py_DECREF(tempVec);
+    Py_DECREF(tempCentroid);
+    
     return resCentroids;
 }
 

@@ -279,10 +279,6 @@ static PyObject* fit(PyObject *self, PyObject *args){
     free(centroids);
     free(clusters);
     free(clustersSizes);
-    Py_DECREF(pyCentroids);
-    Py_DECREF(pyVectors);
-    Py_DECREF(tempVec);
-    Py_DECREF(tempCentroid);
     
     return resCentroids;
 }
